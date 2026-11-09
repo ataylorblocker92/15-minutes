@@ -1,0 +1,34 @@
+# Instrument universe. Add instruments here, not in code.
+#
+# history_start: earliest date to download. Downloads stop at the newest
+# fully finished bar. If the source has nothing that far back, the
+# downloader simply starts at the first bar the source has.
+
+data_root: data
+bar_minutes: 15
+
+instruments:
+  # --- Crypto: free from Coinbase's public market-data API ---
+  - symbol: BTC-USD
+    asset_class: crypto
+    source: coinbase
+    exchange_tz: UTC
+    session: "24x7"
+    history_start: 2020-01-01
+
+  - symbol: ETH-USD
+    asset_class: crypto
+    source: coinbase
+    exchange_tz: UTC
+    session: "24x7"
+    history_start: 2020-01-01
+
+  # SOL-USD only began trading on Coinbase in mid-2021, so it has less history.
+  - symbol: SOL-USD
+    asset_class: crypto
+    source: coinbase
+    exchange_tz: UTC
+    session: "24x7"
+    history_start: 2020-01-01
+
+  # --- Stocks/ETFs (Massive) and forex (Dukascopy): added in later steps ---

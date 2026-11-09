@@ -1,6 +1,6 @@
 # CLAUDE.md — 15-minutes
 
-Research project: find 2- and 3-candle patterns on 15-minute charts (stocks/ETFs, futures, forex, crypto), test whether they predict direction, then size and path, over the next 1, 2, 4 and 8 candles, and check whether strategies built on them survive unseen data after costs and risk.
+Research project: find 2- and 3-candle patterns on 15-minute charts (crypto, stocks/ETFs, forex; futures dropped per D10), test whether they predict direction, then size and path, over the next 1, 2, 4 and 8 candles, and check whether strategies built on them survive unseen data after costs and risk.
 
 ## Source of truth
 
@@ -46,7 +46,15 @@ tests/
 
 ## Commands
 
-Not built yet. When the CLI exists, list one command per module here, e.g. `candles ingest --config config/instruments.yaml`.
+Install once: `pip install -e ".[dev]"`
+
+| Command | What it does |
+| --- | --- |
+| `candles ingest` | Download raw bars for every instrument whose source is built (Coinbase so far). `-s BTC-USD` for one. Safe to stop and rerun. |
+| `candles clean` | Build `data/clean/<SYMBOL>.parquet` + manifest from the raw files. |
+| `pytest` | Run all tests. Must pass before every commit. |
+
+Asset classes in scope: crypto (Coinbase, free), stocks/ETFs (Massive, paid), forex (Dukascopy, free). Futures are out of scope (see DECISIONS.md D10).
 
 ## Working style
 
