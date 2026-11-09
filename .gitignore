@@ -1,0 +1,23 @@
+# Data and outputs are never committed
+data/*
+!data/.gitkeep
+vault/*
+!vault/holdout/
+vault/holdout/*
+!vault/holdout/.gitkeep
+results/*
+!results/.gitkeep
+*.parquet
+*.csv
+
+# Secrets
+.env
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
