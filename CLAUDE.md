@@ -24,7 +24,7 @@ If code and the design docs disagree, stop and ask. Don't quietly pick one.
 
 ## Conventions
 
-- Python 3.12. Polars for dataframes, DuckDB for SQL over Parquet, NumPy/Numba for bar loops, SciPy/statsmodels for stats, Pydantic for config, Typer for the CLI, pytest + Hypothesis for tests, Plotly for charts.
+- Python 3.15. Polars for dataframes, DuckDB for SQL over Parquet, NumPy/Numba for bar loops, SciPy/statsmodels for stats, Pydantic for config, Typer for the CLI, pytest + Hypothesis for tests, Plotly for charts.
 - All timestamps are UTC, stored as bar-open time. Keep the exchange timezone in a separate column.
 - Normalize price moves by ATR(14) for cross-instrument comparisons. Keep raw points and percent too.
 - Settings live in `config/*.yaml`, not in code. Don't hard-code instruments, dates, buckets, horizons or cost rates.
