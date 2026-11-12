@@ -31,4 +31,13 @@ candles clean  -s BTC-USD
 
 Then check `data/clean/BTC-USD.manifest.json`: it shows the bar count, date range and how many gaps the data has. When BTC looks right, run `candles ingest` and `candles clean` with no `-s` to get all three coins.
 
-Status: Phase 1 (data foundation). Crypto downloader built; stocks and forex next.
+## First end-to-end slice (BTC-USD, discovery data only)
+
+```bash
+candles split    -s BTC-USD   # discovery / validation / locked holdout
+candles features -s BTC-USD   # ATR + four 2-candle patterns
+candles labels   -s BTC-USD   # next-candle direction
+candles stats    -s BTC-USD   # hit-rate table, logged to the test registry
+```
+
+Status: Phase 1 done for crypto. A thin first version of split, features, labels and stats runs end to end on BTC-USD. Stocks and forex downloaders next.

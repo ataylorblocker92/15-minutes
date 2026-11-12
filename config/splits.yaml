@@ -1,0 +1,21 @@
+# Where history is cut into discovery / validation / holdout (DECISIONS.md D4).
+#
+# The same calendar dates apply to every instrument, so one instrument's
+# holdout period never overlaps another instrument's discovery period.
+#
+#   discovery   every bar before discovery_end
+#   (embargo)   embargo_days dropped, so a forward label can't reach across
+#   validation  from discovery_end + embargo, up to validation_end
+#   (embargo)   embargo_days dropped
+#   holdout     from validation_end + embargo onward -> locked vault
+#
+# Dates are UTC days. With history starting 2020-01-01 this is roughly
+# 60% / 20% / 20% as of November 2026.
+#
+# DO NOT move these dates after discovery work has started without Taylor
+# agreeing: shrinking discovery would leak already-studied bars into validation.
+
+discovery_end: 2024-02-01     # first day NOT in discovery
+validation_end: 2025-07-01    # first day NOT in validation
+embargo_days: 1
+vault_root: vault/holdout

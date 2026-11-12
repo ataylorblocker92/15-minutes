@@ -1,0 +1,15 @@
+# Pattern settings. The rules themselves are written out in
+# src/candles/features/patterns.py; this file says which ones are switched on.
+
+atr_period: 14          # bars in the ATR average (Design Doc 1)
+
+# A pattern is only tested if it shows up at least this many times in the
+# split being studied (Design Doc 1, minimum sample rule).
+min_occurrences: 300
+
+# Track A, 2-candle patterns. First slice: four textbook shapes.
+two_candle:
+  - bullish_engulfing
+  - bearish_engulfing
+  - inside_bar
+  - outside_bar

@@ -1,0 +1,8 @@
+# Forward-looking targets (Design Doc 1, "Prediction targets").
+#
+# horizons: how many candles ahead to measure. The full study uses 1, 2, 4, 8
+# (DECISIONS.md D2). The first slice only builds 1.
+horizons: [1]
+
+# A move smaller than this many ATRs counts as "flat", not up or down.
+flat_atr: 0.05

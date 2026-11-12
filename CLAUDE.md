@@ -52,7 +52,13 @@ Install once: `pip install -e ".[dev]"`
 | --- | --- |
 | `candles ingest` | Download raw bars for every instrument whose source is built (Coinbase so far). `-s BTC-USD` for one. Safe to stop and rerun. |
 | `candles clean` | Build `data/clean/<SYMBOL>.parquet` + manifest from the raw files. |
+| `candles split` | Cut clean bars by the dates in `config/splits.yaml` into `data/discovery/`, `data/validation/` and `vault/holdout/` (written, never read back). |
+| `candles features` | Build ATR and pattern flags into `data/features/<split>/`. `--split validation` for the other open split; the holdout is not an option. |
+| `candles labels` | Build forward targets into `data/labels/<split>/`. The only step that looks ahead. |
+| `candles stats` | Hit-rate table per pattern into `results/patterns/<run_id>/`; appends every test to the registry. |
 | `pytest` | Run all tests. Must pass before every commit. |
+
+The holdout can only be read through `candles.vault.read_holdout(..., unlock=True)`, which logs every attempt to `results/holdout_access.log`. No command uses it yet.
 
 Asset classes in scope: crypto (Coinbase, free), stocks/ETFs (Massive, paid), forex (Dukascopy, free). Futures are out of scope (see DECISIONS.md D10).
 
