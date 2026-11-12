@@ -14,11 +14,7 @@ For a fresh session. Read `CLAUDE.md` first (hard rules), then this note. Replac
 
 ## Committed vs. not committed
 
-- **Committed and pushed:** the Phase 1 code (`28a1ef6`), the Mac session's log entry (`9b04e9c`), plus this note, `research_log.md` and `DECISIONS.md`.
-- **NOT committed (sitting in the working tree):** the whole end-to-end slice. Taylor was asked whether to commit it and has not answered yet. Do not commit it without a yes.
-  - Modified: `CLAUDE.md`, `README.md`, `pyproject.toml`, `src/candles/cli.py`, `src/candles/config.py`
-  - New: `config/splits.yaml`, `config/patterns.yaml`, `config/labels.yaml`, `src/candles/vault.py`, `src/candles/runid.py`, `src/candles/split/splitter.py`, `src/candles/features/{atr,patterns,build}.py`, `src/candles/labels/forward.py`, `src/candles/stats/{hit_rate,registry}.py`, `tests/helpers.py`, `tests/test_{split,features,labels,stats}.py`
-- Note: the committed research log and DECISIONS entries describe this uncommitted code.
+Everything is committed and pushed, including the end-to-end slice (`ab3e148`, committed with Taylor's go-ahead on 2026-11-11). The working tree is clean.
 
 ## Two machines
 
@@ -43,7 +39,7 @@ Discovery only, next candle, base rate 50.44% up. Bullish engulfing 49.45% (p 0.
 
 ## Known gaps and rough edges
 
-- Run IDs are marked `-dirty-<timestamp>` whenever the tree has uncommitted changes, so every `candles stats` run right now logs 4 more registry rows. Commit before re-running stats to avoid padding the registry.
+- Run IDs are marked `-dirty-<timestamp>` whenever the tree has uncommitted changes, and each dirty `candles stats` run logs its tests again. Commit before running stats. The one existing result was run dirty; a clean rerun would log 4 more rows under a clean run ID.
 - The stats shortcuts listed above mean no p-value from this slice should be trusted or quoted.
 - `candles split` rewrites all three blocks (including the vault file) each time it runs, and the holdout grows with each new download because it has no end date.
 - The Windows `.venv` is Python 3.14 while CLAUDE.md says 3.15. `AssetClass` in `config.py` still lists `future` (dropped in D10). Harmless, not cleaned up.
@@ -52,7 +48,7 @@ Discovery only, next candle, base rate 50.44% up. Bullish engulfing 49.45% (p 0.
 
 ## Waiting on Taylor
 
-1. **Commit the slice?** (and push)
+1. ~~Commit the slice?~~ Done (`ab3e148`).
 2. **D13, split dates:** global calendar dates (discovery before 2024-02-01, validation to 2025-06-30, holdout from 2025-07-02). Stocks with 5 years of history would get a smaller discovery share. Hard to change after more discovery work.
 3. **D14:** plain-average ATR, blank across gaps, instead of Wilder smoothing.
 4. **D15:** features and labels under `data/features/` and `data/labels/`.
@@ -62,7 +58,7 @@ Discovery only, next candle, base rate 50.44% up. Bullish engulfing 49.45% (p 0.
 
 ## Recommended next step
 
-Get answers to 1 and 2 first. Then, in order:
+Get an answer to 2 (split dates) first. Then, in order:
 
 1. Horizons 2, 4, 8 in labels (the code already loops over `config/labels.yaml` horizons; add tests for overlap).
 2. Proper stats: standard errors clustered by day, base rate matched by time of day, Benjamini–Hochberg over the registry (fills `adjusted_p`).
