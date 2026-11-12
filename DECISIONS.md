@@ -16,9 +16,14 @@ Settled choices. Each entry has a date, the decision, and why. To change one, ad
 | D10 | 2026-11-09 | Futures dropped from scope; at most one paid data subscription | Futures history too expensive; budget limit | Settled |
 | D11 | 2026-11-09 | Crypto data from Coinbase public API (BTC-USD, ETH-USD, SOL-USD) | Free, US-accessible, USD pairs | Settled |
 | D12 | 2026-11-09 | Stocks/ETFs from Massive Stocks Starter ($29/mo, 5 yrs minute bars); forex from Dukascopy (free) | One paid source; forex is available free | Proposed |
+| D13 | 2026-11-11 | Split boundaries are global UTC calendar dates, same for every instrument: discovery before 2024-02-01, validation 2024-02-02 to 2025-06-30, holdout from 2025-07-02; 1-day embargo at each boundary (`config/splits.yaml`). Fills in D4. | Per-instrument 60/20/20 would let one instrument's holdout overlap another's discovery period | Proposed |
+| D14 | 2026-11-11 | ATR(14) is a plain 14-bar average of true range, blank whenever its window touches a gap (not Wilder smoothing) | Wilder's running average carries values across gaps, which conflicts with the no-fill rule | Proposed |
+| D15 | 2026-11-11 | Feature and label tables live in `data/features/<split>/` and `data/labels/<split>/` | Design Doc 2 names the folders but not their location; under `data/` they stay git-ignored | Proposed |
 
 ## Open
 
+- Confirm D13: with global dates, stocks (5 years of history from Massive) get a smaller discovery share than crypto. Accept, or shorten crypto history to match?
+- Holdout is open-ended (grows with each new download). Fix an end date before the final test?
 - Confirm Massive for stocks and Dukascopy for forex
 - Starter instrument list (proposed: SPY, QQQ, IWM, AAPL · EUR/USD, GBP/USD, USD/JPY, AUD/USD · BTC, ETH, SOL)
 - Pool all asset classes in discovery, or run each class separately first

@@ -14,6 +14,22 @@ Template:
 
 ---
 
+## 2026-11-11 — First end-to-end slice on BTC-USD (discovery only)
+- What was done: on Taylor's Windows PC, a fresh BTC-USD download and clean (240,565 bars, 2020-01-01 to 2026-11-11 23:15, 16 gaps / 105 missing bars, 1 zero-range bar, 0 invalid). This is a separate copy from the Mac download in the 2026-11-10 entry: same gap counts, 83 more bars because it was pulled later, so the clean-file checksum and any run ID differ between the two machines. Built thin first versions of `split`, `features` (ATR14 + bullish/bearish engulfing, inside bar, outside bar), `labels` (1 candle ahead, flat under 0.05 ATR) and `stats` (up-vs-down hit rate against the all-bars base rate, binomial p-value, test registry). Holdout lock added (`candles.vault`). 43 tests passing, including future-shift tests. Added `tzdata` and `scipy` to dependencies; the Windows `.venv` is Python 3.14 (3.15 is also installed and is what CLAUDE.md names; 3.14 was picked before that change was seen).
+- Split (D13, proposed): discovery 143,184 bars (59.5%), validation 49,431 (20.5%), holdout 47,758 (19.9%), 192 embargo bars dropped. Holdout written to the vault and not read.
+- Run ID: `321b96de-28a1ef6-7f1c85e3-dirty-20261111T233803Z` ("dirty" = code not yet committed)
+- Result (discovery, h=1, base rate 50.44% up of 143,004 labelled bars):
+
+  | Pattern | n | Up rate | Edge vs base | p (naive) |
+  | --- | --- | --- | --- | --- |
+  | bullish_engulfing | 12,423 | 49.45% | -0.99% | 0.033 |
+  | bearish_engulfing | 10,143 | 51.77% | +1.33% | 0.010 |
+  | inside_bar | 23,732 | 50.51% | +0.07% | 0.835 |
+  | outside_bar | 14,399 | 50.21% | -0.23% | 0.604 |
+
+- Reading: nothing here is a finding. Edges are about 1 percentage point at most, far below trading costs. The p-values are naive (no clustering by day, base rate not matched by time of day, no FDR correction). Both engulfing patterns lean slightly against their textbook direction (mild mean reversion), which is worth re-checking once the stats are done properly. 4 tests logged to the registry.
+- Next: Taylor to confirm D13–D15. Then horizons 2/4/8, clustered standard errors and time-of-day base rate, BH correction, and the same slice on ETH-USD and SOL-USD.
+
 ## 2026-11-10 — First real crypto download and clean (BTC, ETH, SOL)
 - What was done: set up `.venv` on Taylor's Mac (Python 3.15.2), 17 tests passing. Ran `candles ingest` for BTC-USD, ETH-USD and SOL-USD from Coinbase (83 monthly files each, 2020-01 to 2026-11), then `candles clean`. The three were topped up back to back at 02:48 UTC on 2026-11-11 so they end on the same bar.
 - Run ID: none yet (run IDs start with the later stages). Clean file checksums (sha256, first 12 characters): BTC-USD `a7967abfb695`, ETH-USD `b8e4d91e9b55`, SOL-USD `898f05505d44`. Code at commit 28a1ef6.
