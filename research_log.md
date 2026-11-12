@@ -14,6 +14,13 @@ Template:
 
 ---
 
+## 2026-11-12 — Clean rerun of stats after committing the slice
+- What was done: the 2026-11-11 slice (`ab3e148`) was committed and pushed, then `candles stats -s BTC-USD` was rerun on the now-clean tree so the run ID would not carry a `-dirty-` timestamp. No code or data changed; same discovery bars, same patterns, same labels.
+- Run ID: `321b96de-d9c42c6-7f1c85e3` (replaces the dirty run `321b96de-28a1ef6-7f1c85e3-dirty-20261111T233803Z` as the one to cite; the dirty run's output and registry rows are left in place, nothing is deleted)
+- Result: identical numbers to the 2026-11-11 entry below (base rate 50.44% up; bullish engulfing 49.45% edge -0.99% p 0.033; bearish engulfing 51.77% edge +1.33% p 0.010; inside bar 50.51% edge +0.07% p 0.835; outside bar 50.21% edge -0.23% p 0.604), as expected since nothing upstream changed.
+- Note: `results/test_registry.parquet` now holds 8 rows (4 from the dirty run + 4 from this clean run) for what is really one set of 4 tests. This is the registry doing its job (append-only, hard rule 5) but means the "true test count" for FDR purposes is currently inflated by this duplication. Worth deciding whether dirty-run rows should be marked/excluded before FDR correction is implemented.
+- Next: see 2026-11-11 entry.
+
 ## 2026-11-11 — First end-to-end slice on BTC-USD (discovery only)
 - What was done: on Taylor's Windows PC, a fresh BTC-USD download and clean (240,565 bars, 2020-01-01 to 2026-11-11 23:15, 16 gaps / 105 missing bars, 1 zero-range bar, 0 invalid). This is a separate copy from the Mac download in the 2026-11-10 entry: same gap counts, 83 more bars because it was pulled later, so the clean-file checksum and any run ID differ between the two machines. Built thin first versions of `split`, `features` (ATR14 + bullish/bearish engulfing, inside bar, outside bar), `labels` (1 candle ahead, flat under 0.05 ATR) and `stats` (up-vs-down hit rate against the all-bars base rate, binomial p-value, test registry). Holdout lock added (`candles.vault`). 43 tests passing, including future-shift tests. Added `tzdata` and `scipy` to dependencies; the Windows `.venv` is Python 3.14 (3.15 is also installed and is what CLAUDE.md names; 3.14 was picked before that change was seen).
 - Split (D13, proposed): discovery 143,184 bars (59.5%), validation 49,431 (20.5%), holdout 47,758 (19.9%), 192 embargo bars dropped. Holdout written to the vault and not read.
