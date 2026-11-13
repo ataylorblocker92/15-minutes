@@ -14,6 +14,12 @@ Template:
 
 ---
 
+## 2026-11-13 — D13 settled: accept global split dates as-is
+- What was done: Taylor confirmed D13 (global UTC calendar split dates, same for every instrument) rather than shortening crypto's history to match stocks or splitting per-instrument. Stocks will get a smaller discovery share than crypto under this scheme; accepted as a tradeoff since per-instrument splits risk one instrument's holdout overlapping another's discovery period. `DECISIONS.md` D13 updated to Settled; the "Confirm D13" open item removed. No code or data changed.
+- Run ID: n/a (decision only)
+- Result: n/a
+- Next: horizons 2/4/8 in labels (overlap tests), then proper stats (clustered SEs, time-of-day base rate, BH correction — settle the registry duplicate-row question first), then run the slice on ETH-USD and SOL-USD.
+
 ## 2026-11-12 — Clean rerun of stats after committing the slice
 - What was done: the 2026-11-11 slice (`ab3e148`) was committed and pushed, then `candles stats -s BTC-USD` was rerun on the now-clean tree so the run ID would not carry a `-dirty-` timestamp. No code or data changed; same discovery bars, same patterns, same labels.
 - Run ID: `321b96de-d9c42c6-7f1c85e3` (replaces the dirty run `321b96de-28a1ef6-7f1c85e3-dirty-20261111T233803Z` as the one to cite; the dirty run's output and registry rows are left in place, nothing is deleted)
