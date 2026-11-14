@@ -14,6 +14,22 @@ Template:
 
 ---
 
+## 2026-11-13 — Horizons 2/4/8 turned on; AGENTS.md committed; D16 on dirty runs
+- What was done: after D13 was settled (below), turned on horizons 2, 4, 8 in `config/labels.yaml` (the labels code already looped generically over whatever horizons were configured, so this was mostly config plus two new tests for a gap that sits inside the 8-bar window but outside the 4-bar one — 45 tests passing). Committed that (`c8ab666`). Then found the stray untracked `AGENTS.md` from the last handoff was making every run tag itself "dirty" (git sees any untracked file as a dirty tree) — Taylor chose to commit it as-is (`2f35484`) rather than delete it. Reran `candles labels -s BTC-USD` and `candles stats -s BTC-USD` on the now-clean tree.
+- Run ID: `d208c8b1-2f35484-edf56f2d` (clean; a `-dirty-20261113T234054Z` run of the same 16 tests happened in between the two commits above and is superseded — see D16)
+- Result (discovery, BTC-USD, base rates 50.44% h=1 / 50.57% h=2 / 50.89% h=4 / 51.05% h=8):
+
+  | Pattern | h=1 edge (p) | h=2 edge (p) | h=4 edge (p) | h=8 edge (p) |
+  | --- | --- | --- | --- | --- |
+  | bullish_engulfing | -0.99% (0.033) | -2.64% (<0.0001) | -2.33% (<0.0001) | -2.33% (<0.0001) |
+  | bearish_engulfing | +1.33% (0.010) | +2.96% (<0.0001) | +2.67% (<0.0001) | +2.40% (<0.0001) |
+  | inside_bar | +0.07% (0.835) | +0.11% (0.734) | -0.24% (0.470) | +0.01% (0.984) |
+  | outside_bar | -0.23% (0.604) | -0.32% (0.452) | -0.50% (0.244) | -0.66% (0.120) |
+
+- Reading: same mean-reversion lean as the single-horizon result, now visibly larger and more significant at h=2/4/8 than h=1 for both engulfing patterns — still not a finding. These p-values are still naive (no clustering by day, no time-of-day base rate, no FDR correction), and now there's a known registry duplication (see D16) to account for before any correction is trustworthy. 16 tests logged this run; registry holds 40 rows total for 24 distinct tests (the original 8 duplicate h=1 rows from 2026-11-12, plus this run's 16 dirty-then-clean duplicates).
+- Also: D16 settled — don't run `candles stats` on a dirty tree going forward (commit or stash first). Doesn't retroactively fix existing duplicate rows; those get filtered by run_id pattern when FDR correction is built.
+- Next: proper stats (clustered SEs, time-of-day base rate, BH correction), then the same slice on ETH-USD and SOL-USD.
+
 ## 2026-11-13 — D13 settled: accept global split dates as-is
 - What was done: Taylor confirmed D13 (global UTC calendar split dates, same for every instrument) rather than shortening crypto's history to match stocks or splitting per-instrument. Stocks will get a smaller discovery share than crypto under this scheme; accepted as a tradeoff since per-instrument splits risk one instrument's holdout overlapping another's discovery period. `DECISIONS.md` D13 updated to Settled; the "Confirm D13" open item removed. No code or data changed.
 - Run ID: n/a (decision only)
